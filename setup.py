@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='selen',
-    version='0.1.0',
+    version='0.1.3',
     author='Illia Abielientsev',
     author_email='abelencev.ik@gmail.com',
     description='Selenium wrapper',
@@ -16,7 +16,7 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/SatoDeNoor/selen/issues"
     },
     license='MIT',
-    packages=['selen'],
+    packages=['selen', 'selen.client'],
     install_requires=[
         'pytest-selenium',
         'allure-pytest'

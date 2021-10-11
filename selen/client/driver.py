@@ -1,9 +1,11 @@
 import os
 import platform
 import time
+import operator
 
 from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import allure
@@ -136,3 +138,92 @@ class Operations:
         if clear is True:
             web_element.clear()
         web_element.send_keys(data)
+
+    @staticmethod
+    def zoom(web_element: object, zoom):
+        DriverInstance().get_driver().execute_script("arguments[0].style.zoom = arguments[1]", web_element, f'{zoom}%')
+
+    @staticmethod
+    def checkbox_state(web_element: object):
+        # returns checkbox status
+        return bool(web_element.get_attribute('checked'))
+
+    @staticmethod
+    def style(web_element: object, css_property: str):
+        # returns value of css property
+        return web_element.value_of_css_property(css_property)
+
+    @staticmethod
+    def element_state(web_element: object):
+        # returns enabled/disabled element state
+        flag = web_element.get_attribute('disabled')
+        if flag == 'true':
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def scroll(web_element: object, width, height):
+        DriverInstance().get_driver().execute_script('window.scrollBy(arguments[1],arguments[2])',
+                                                     web_element, width, height)
+
+    @staticmethod
+    def right_click(web_element: object):
+        ActionChains(DriverInstance().get_driver()).context_click(web_element).perform()
+
+    @staticmethod
+    def double_click(web_element: object):
+        ActionChains(DriverInstance().get_driver()).double_click(web_element).perform()
+
+    @staticmethod
+    def switch_to_active_element():
+        return DriverInstance().get_driver().switch_to.active_element
+
+    @staticmethod
+    def move_to_element(web_element: object):
+        ActionChains(DriverInstance().get_driver()).move_to_element(web_element).perform()
+
+    @staticmethod
+    def click_on_demand(self):
+        ActionChains(self.get_driver()).click().perform()
+
+    @staticmethod
+    def keyboard(command: str):
+        commands = {
+            'enter': Keys.ENTER,
+            'alt': Keys.ALT,
+            'shift': Keys.SHIFT,
+            'ctrl': Keys.CONTROL,
+            'escape': Keys.ESCAPE,
+            'backspace': Keys.BACKSPACE,
+            'tab': Keys.TAB,
+            'command': Keys.COMMAND,
+            'up': Keys.UP,
+            'down': Keys.DOWN,
+            'left': Keys.LEFT,
+            'right': Keys.RIGHT
+        }.get(command)
+        ActionChains(DriverInstance().get_driver()).send_keys(commands).perform()
+
+
+class Validation:
+
+    @staticmethod
+    def text_validation(actual_text: str, expected_text: str, check_msg, condition, waiting=1, attempts=3):
+        for attempt in range(attempts):
+            fails_log = []
+            msg = f'#MESSAGE# Actual data: "{actual_text}", expected: "{expected_text}", condition: "{condition}". '
+            try:
+                ops = {'in': operator.contains,
+                       '==': operator.eq,
+                       '!=': operator.ne}[condition]
+                if not ops(actual_text, expected_text):
+                    fails_log.append(msg + check_msg + ' Check FAILED')
+                break
+            except:
+                pass
+            time.sleep(waiting)
+            if attempt + 1 == attempts:
+                fails_log.append(msg + check_msg + ' Check FAILED')
+        return fails_log if fails_log else None
+

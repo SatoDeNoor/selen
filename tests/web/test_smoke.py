@@ -11,8 +11,7 @@ def test_send_keys(driver):
     driver.get('https://www.google.com/')
     input = Operations.web_element('//input[@role="combobox"]')
     Operations.send_data(input, 'selenium download')
-    search_button = Operations.web_element('(//input[@*[contains(.,"Google")]])[2]')
-    search_button.click()
+    Operations.keyboard('enter')
     link = Operations.web_element('((//div[@class="g"])[1]//a)[1]').get_attribute('href')
     assert 'selenium' in link, 'Send Keys check FAILED'
 
