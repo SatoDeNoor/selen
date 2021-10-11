@@ -6,7 +6,7 @@ Selen is a selenium wrapper.
 
 ## Installation
 ```commandline
-pip install git+https://github.com/SatoDeNoor/selen.git@develop
+pip install git+https://github.com/SatoDeNoor/selen.git
 ```
 
 ## Features

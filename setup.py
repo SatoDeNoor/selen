@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='selen',
-    version='0.1.0',
+    version='0.1.1',
     author='Illia Abielientsev',
     author_email='abelencev.ik@gmail.com',
     description='Selenium wrapper',

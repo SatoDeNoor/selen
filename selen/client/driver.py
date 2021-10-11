@@ -4,6 +4,7 @@ import time
 
 from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import allure
@@ -136,3 +137,10 @@ class Operations:
         if clear is True:
             web_element.clear()
         web_element.send_keys(data)
+
+    @staticmethod
+    def keyboard(command: str):
+        commands = {
+            'enter': Keys.ENTER
+        }.get(command)
+        ActionChains(DriverInstance().get_driver()).send_keys(commands).perform()
