@@ -1,6 +1,6 @@
 import pytest
 from selen.client.driver import Driver, DriverInstance
-from selen.client.helper import Tool
+from selen.client.helper import Tools
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
@@ -21,5 +21,5 @@ def driver(request):
     driver.set_script_timeout(30)
     yield driver
     if request.node.rep_call.failed:
-        Driver.create_screenshot(driver, Tool.time_stamp(request.function.__name__ + '--'), 'allure')
+        Driver.create_screenshot(driver, Tools.time_stamp(request.function.__name__ + '--'), 'allure')
     driver.quit()

@@ -1,17 +1,13 @@
 import os
-import platform
 import time
-import operator
-
+import allure
 from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import allure
 from allure_commons.types import AttachmentType
 
-current_os = platform.system().lower()
 _driver_instance = None
 
 
@@ -144,9 +140,9 @@ class Operations:
         DriverInstance().get_driver().execute_script("arguments[0].style.zoom = arguments[1]", web_element, f'{zoom}%')
 
     @staticmethod
-    def checkbox_state(web_element: object):
-        # returns checkbox status
-        return bool(web_element.get_attribute('checked'))
+    def attribute(web_element: object, attribute: str):
+        # returns value of attribute
+        return web_element.get_attribute(attribute)
 
     @staticmethod
     def style(web_element: object, css_property: str):
@@ -204,26 +200,4 @@ class Operations:
             'right': Keys.RIGHT
         }.get(command)
         ActionChains(DriverInstance().get_driver()).send_keys(commands).perform()
-
-
-class Validation:
-
-    @staticmethod
-    def text_validation(actual_text: str, expected_text: str, check_msg, condition, waiting=1, attempts=3):
-        for attempt in range(attempts):
-            fails_log = []
-            msg = f'#MESSAGE# Actual data: "{actual_text}", expected: "{expected_text}", condition: "{condition}". '
-            try:
-                ops = {'in': operator.contains,
-                       '==': operator.eq,
-                       '!=': operator.ne}[condition]
-                if not ops(actual_text, expected_text):
-                    fails_log.append(msg + check_msg + ' Check FAILED')
-                break
-            except:
-                pass
-            time.sleep(waiting)
-            if attempt + 1 == attempts:
-                fails_log.append(msg + check_msg + ' Check FAILED')
-        return fails_log if fails_log else None
 
