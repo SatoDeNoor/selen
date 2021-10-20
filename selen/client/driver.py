@@ -200,3 +200,4 @@ class Operations:
             'right': Keys.RIGHT
         }.get(command)
         ActionChains(DriverInstance().get_driver()).send_keys(commands).perform()
+
